@@ -25,12 +25,12 @@ app.use(express.json());
 // Mount routers
 app.use('/api/notes', notesRouter);
 
-// Custom 404 Not Found route handler
-app.use((req, res, next) => {
-  const err = new Error('Not Found');
-  err.status = 404;
-  next(err);
-});
+  // Custom 404 Not Found route handler
+  app.use((req, res, next) => {
+    const err = new Error('Not Found');
+    err.status = 404;
+    next(err);
+  });
 
 // Custom Error Handler
 app.use((err, req, res, next) => {
