@@ -44,6 +44,11 @@ router.post('/', (req, res, next) => {
     title,
     content
   };
+  if (!title) {
+    const err = new Error('Missing `title` in request body');
+    err.status = 400;
+    return next(err);
+  }
   return Note.create(newItem)
     .then((results) => {
       if (results) {
@@ -87,7 +92,7 @@ router.delete('/:id', (req, res, next) => {
   return Note.findByIdAndRemove(id)
     .then((results) => {
       if (results) {
-        res.json(1);
+        res.status(204).end();
       } else {
         next();
       }
