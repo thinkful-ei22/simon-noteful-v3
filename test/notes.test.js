@@ -14,3 +14,35 @@ const seedNotes = require('../db/seed/notes');
 
 const expect = chai.expect; 
 chai.use(chaiHttp);
+
+describe('Notes API resource', function() {
+  before(function () {
+    return mongoose.connect(TEST_MONGODB_URI)
+      .then(() => mongoose.connection.db.dropDatabase());
+  });
+
+  beforeEach(function () {
+    return Note.insertMany(seedNotes);
+  });
+
+  afterEach(function () {
+    return mongoose.connection.db.dropDatabase();
+  });
+
+  after(function () {
+    return mongoose.disconnect();
+  });
+});
+
+describe('GET /api/notes', function () {
+  return Promise.all([
+    Note.find(),
+    chai.request(app).get('/api/notes')
+  ])
+    .then(([data, res]) => {
+      expect(res).to.have.status(200);
+      expect(res).to.be.json;
+      expect(res.body).to.be.a('array');
+      expect(res.body).to.have.length(data.length);
+    });
+});
