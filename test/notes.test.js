@@ -70,10 +70,8 @@ describe('Notes API resource', function () {
     });
     it('should return correct search results for a searchTerm query', function () {
       const searchTerm = 'Lady Gaga';
-      // const re = new RegExp(searchTerm, 'i');
       const dbPromise = Note.find({
         title: { $regex: searchTerm, $options: 'i' }
-        // $or: [{ 'title': re }, { 'content': re }]
       });
       const apiPromise = chai.request(app)
         .get(`/api/notes?searchTerm=${searchTerm}`);
@@ -186,11 +184,10 @@ describe('Notes API resource', function () {
           expect(res.body.title).to.equal(updateItem.title);
           expect(res.body.content).to.equal(updateItem.content);
           expect(new Date(res.body.createdAt)).to.eql(data.createdAt);
-          // expect note to have been updated
           expect(new Date(res.body.updatedAt)).to.greaterThan(data.updatedAt);
         });
     });
-    it('should return an error when missing "title" field', function () {
+    it('should return an error when missing title', function () {
       const updateItem = {
         'content': 'woof woof'
       };
@@ -212,7 +209,7 @@ describe('Notes API resource', function () {
     });
   });
 
-  // TEST FOR DDLETE;
+  // TEST FOR DeLETE;
 
   describe('DELETE /api/notes/:id', function () {
     it('should delete an existing document and respond with 204', function () {
