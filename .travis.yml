@@ -1,3 +1,10 @@
 language: node_js
 node_js: node
 services: mongodb
+deploy:
+  provider: heroku
+  api_key:
+    secure: aTnRa4zFE2UQthqZ1+y6v9A2F659v05pOI/Fhiq8dxfXf4xMfX4MprjL8b5sfRMhHKUkqrOuRFB1Arlo+uD1ZnRCd3fq8aSqmBMpTYL3gxreZoaB3cvVrQ+Bwvzun+xZ6IN2ETTXHarL+S0qPA0+GmI+V1BjSGGw188yxjmFjWBWk1L49grzjhc7vhKbbVzXk5C8Pf+zTjM2vKKhe25lBbUFphXSiv7bauKT6B/YSFnma+XR/HJBRbkCwpvQe5S39G+dyTfn08KWMElpfLoFiDhTw82l5OGhdrQE68SRLAON/LGRTEl0IA9TF0C/ORsuBCgFHiIZpgjoHwchH4wdG6YTGYShBLXgqjdfFu8dfLFtMQM+7TcSRLGp20BdUkIIIGAXqShDPX1HhKv2aVrP7UVDzcdaIzZym2CT/7W5K7XdeLMcfv5XJmeJG1opeRhbbArGFR1k6oIE9p9XrLkYZy6Lqi4QZsKXAShnIBjt93vs6+3EW6uM0h1G5HzdqMAHERJPtlZIsf6xOWSAAnIrvGH9Yb7GtYFIKlvzxiuk38Rtvqq3PMflzsLnS5WeeM/ugdol2axMXy14KsOVg5nGQcKIbMfwMfZTglXGoBdeKYWfrptZSSal9A35DZT3entzIct6XSh6RBvobgi7cj09FIJJEkv0n3Fa5COPHUA308g=
+  app: young-ridge-42336
+  on:
+    repo: thinkful-ei22/simon-noteful-v3
