@@ -1,22 +1,18 @@
 'use strict';
 
 const express = require('express');
+const Folder = require('../models/folder');
 const mongoose = require('mongoose');
-const Note = require('../models/note');
-
 const router = express.Router();
 
 /* ========== GET/READ ALL ITEMS ========== */
 router.get('/', (req, res, next) => {
-  const {searchTerm, folderId} = req.query;
+  const {searchTerm} = req.query;
   let filter = {};
   if (searchTerm) {
-    filter.title = { $regex: searchTerm };
+    filter.name = { $regex: searchTerm };
   }
-  if (folderId) {
-    filter.folderId = folderId;
-  }
-  return Note.find(filter).sort({ updatedAt: 'desc' })
+  return Folder.find(filter).sort({ updatedAt: 'asc' })
     .then((results) => {
       if (results) {
         res.json(results);
@@ -30,7 +26,12 @@ router.get('/', (req, res, next) => {
 /* ========== GET/READ A SINGLE ITEM ========== */
 router.get('/:id', (req, res, next) => {
   const id = req.params.id;
-  return Note.findById(id)
+  if (!mongoose.Types.ObjectId.isValid(id)) {
+    const err = new Error('Id not valid');
+    err.status = 404;
+    return next(err);
+  }
+  return Folder.findById(id)
     .then((results) => {
       if (results) {
         res.json(results);
@@ -43,26 +44,19 @@ router.get('/:id', (req, res, next) => {
 
 /* ========== POST/CREATE AN ITEM ========== */
 router.post('/', (req, res, next) => {
-  const {title, content, folderId} = req.body;
+  const {name} = req.body;
   const newItem = {
-    title,
-    content,
-    folderId
+    name
   };
-  if (!title) {
-    const err = new Error('Missing `title` in request body');
+  if (!name) {
+    const err = new Error('Missing `name` in request body');
     err.status = 400;
     return next(err);
   }
-  if (!(mongoose.Types.ObjectId.isValid(folderId))) {
-    const err = new Error('`folderId` not valid');
-    err.status = 400;
-    return next(err);
-  }
-  return Note.create(newItem)
+  return Folder.create(newItem)
     .then((results) => {
       if (results) {
-        res.json(results);
+        res.location(`${req.originalUrl}/${res.id}`).status(201).json(results);
       } else {
         next();
       }
@@ -79,23 +73,21 @@ router.post('/', (req, res, next) => {
 /* ========== PUT/UPDATE A SINGLE ITEM ========== */
 router.put('/:id', (req, res, next) => {
   const id = req.params.id;
-  const {title, content, folderId} = req.body;
+  const {name} = req.body;
   const updateObj = {
-    title,
-    content,
-    folderId
+    name
   };
-  if (!updateObj.title) {
-    const err = new Error('Missing `title` in request body');
+  if (!mongoose.Types.ObjectId.isValid(id)) {
+    const err = new Error('Id not valid');
+    err.status = 404;
+    return next(err);
+  }
+  if (!updateObj.name) {
+    const err = new Error('Missing `name` in request body');
     err.status = 400;
     return next(err);
   }
-  if (!(mongoose.Types.ObjectId.isValid(folderId))) {
-    const err = new Error('`folderId` not valid');
-    err.status = 400;
-    return next(err);
-  }
-  return Note.findByIdAndUpdate(id, updateObj, {new: true})
+  return Folder.findByIdAndUpdate(id, updateObj, {new: true})
     .then((results) => {
       if (results) {
         res.json(results);
@@ -115,7 +107,7 @@ router.put('/:id', (req, res, next) => {
 /* ========== DELETE/REMOVE A SINGLE ITEM ========== */
 router.delete('/:id', (req, res, next) => {
   const id = req.params.id;
-  return Note.findByIdAndRemove(id)
+  return Folder.findByIdAndRemove(id)
     .then((results) => {
       if (results) {
         res.status(204).end();

@@ -107,7 +107,7 @@ describe('Notes API resource', function () {
           expect(res).to.have.status(200);
           expect(res).to.be.json;
           expect(res.body).to.be.an('object');
-          expect(res.body).to.have.all.keys('id', 'title', 'content', 'createdAt', 'updatedAt');
+          expect(res.body).to.have.all.keys('id', 'title', 'content', 'createdAt', 'updatedAt', 'folderId');
           expect(res.body.id).to.equal(data.id);
           expect(res.body.title).to.equal(data.title);
           expect(res.body.content).to.equal(data.content);
@@ -121,7 +121,8 @@ describe('Notes API resource', function () {
     it('should insert new item', function() {
       const newItem = {
         'title': 'BEST TITLE',
-        'content': 'BEST CONTENT'
+        'content': 'BEST CONTENT',
+        'folderId': '111111111111111111111101'
       };
       let res;
       return chai.request(app)
@@ -132,13 +133,14 @@ describe('Notes API resource', function () {
           expect(res).to.have.status(200);
           expect(res).to.be.json;
           expect(res.body).to.be.a('object');
-          expect(res.body).to.have.all.keys('id', 'title', 'content', 'createdAt', 'updatedAt');
+          expect(res.body).to.have.all.keys('id', 'title', 'content', 'createdAt', 'updatedAt', 'folderId');
           return Note.findById(res.body.id);
         })
         .then(data => {
           expect(res.body.id).to.equal(data.id);
           expect(res.body.title).to.equal(data.title);
           expect(res.body.content).to.equal(data.content);
+          expect(res.body.folderId).to.equal(`${data.folderId}`);
           expect(new Date(res.body.createdAt)).to.eql(data.createdAt);
           expect(new Date(res.body.updatedAt)).to.eql(data.updatedAt);
         });
@@ -165,7 +167,8 @@ describe('Notes API resource', function () {
     it('should update the note when provided valid data', function () {
       const updateItem = {
         'title': 'What about dogs?!',
-        'content': 'woof woof'
+        'content': 'woof woof',
+        'folderId': '111111111111111111111101'
       };
       let data;
       return Note.findOne()
@@ -179,10 +182,11 @@ describe('Notes API resource', function () {
           expect(res).to.have.status(200);
           expect(res).to.be.json;
           expect(res.body).to.be.a('object');
-          expect(res.body).to.have.all.keys('id', 'title', 'content', 'createdAt', 'updatedAt');
+          expect(res.body).to.have.all.keys('id', 'title', 'content', 'createdAt', 'updatedAt', 'folderId');
           expect(res.body.id).to.equal(data.id);
           expect(res.body.title).to.equal(updateItem.title);
           expect(res.body.content).to.equal(updateItem.content);
+          expect(res.body.folderId).to.equal(`${updateItem.folderId}`);
           expect(new Date(res.body.createdAt)).to.eql(data.createdAt);
           expect(new Date(res.body.updatedAt)).to.greaterThan(data.updatedAt);
         });
