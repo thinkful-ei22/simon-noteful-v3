@@ -126,6 +126,9 @@ describe('Tags API resource', function () {
         })
         .then(function (res) {
           expect(res).to.have.status(200);
+          expect(res.body).to.have.all.keys('id', 'name', 'createdAt', 'updatedAt');
+          expect(res.body.id).to.equal(data.id);
+          expect(res.body.name).to.equal(updateItem.name);
         });
     });
     it('should return an error when missing name', function () {
