@@ -6,7 +6,7 @@ const tagsSchema = new mongoose.Schema({
   name: {type: String, require: true, unique: true},
 });
 
-tagsSchema.set('timestamops', true);
+tagsSchema.set('timestamps', true);
 
 tagsSchema.set('toObject', {
   virtuals: true,

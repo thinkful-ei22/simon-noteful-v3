@@ -107,7 +107,7 @@ describe('Notes API resource', function () {
           expect(res).to.have.status(200);
           expect(res).to.be.json;
           expect(res.body).to.be.an('object');
-          expect(res.body).to.have.all.keys('id', 'title', 'content', 'createdAt', 'updatedAt', 'folderId');
+          expect(res.body).to.have.all.keys('id', 'title', 'content', 'createdAt', 'updatedAt', 'folderId', 'tags');
           expect(res.body.id).to.equal(data.id);
           expect(res.body.title).to.equal(data.title);
           expect(res.body.content).to.equal(data.content);
@@ -122,7 +122,8 @@ describe('Notes API resource', function () {
       const newItem = {
         'title': 'BEST TITLE',
         'content': 'BEST CONTENT',
-        'folderId': '111111111111111111111101'
+        'folderId': '111111111111111111111101',
+        'tags': ['222222222222222222222200']
       };
       let res;
       return chai.request(app)
@@ -133,7 +134,7 @@ describe('Notes API resource', function () {
           expect(res).to.have.status(200);
           expect(res).to.be.json;
           expect(res.body).to.be.a('object');
-          expect(res.body).to.have.all.keys('id', 'title', 'content', 'createdAt', 'updatedAt', 'folderId');
+          expect(res.body).to.have.all.keys('id', 'title', 'content', 'createdAt', 'updatedAt', 'folderId', 'tags');
           return Note.findById(res.body.id);
         })
         .then(data => {
@@ -168,7 +169,8 @@ describe('Notes API resource', function () {
       const updateItem = {
         'title': 'What about dogs?!',
         'content': 'woof woof',
-        'folderId': '111111111111111111111101'
+        'folderId': '111111111111111111111101',
+        'tags': ['222222222222222222222200']
       };
       let data;
       return Note.findOne()
@@ -182,7 +184,7 @@ describe('Notes API resource', function () {
           expect(res).to.have.status(200);
           expect(res).to.be.json;
           expect(res.body).to.be.a('object');
-          expect(res.body).to.have.all.keys('id', 'title', 'content', 'createdAt', 'updatedAt', 'folderId');
+          expect(res.body).to.have.all.keys('id', 'title', 'content', 'createdAt', 'updatedAt', 'folderId', 'tags');
           expect(res.body.id).to.equal(data.id);
           expect(res.body.title).to.equal(updateItem.title);
           expect(res.body.content).to.equal(updateItem.content);
