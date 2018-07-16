@@ -17,7 +17,7 @@ router.get('/', (req, res, next) => {
     filter.folderId = folderId;
   }
   if (tagId) {
-    filter.tag = tagId;
+    filter.tagId = tagId;
   }
   return Note.find(filter).populate('tags').sort({ updatedAt: 'desc' })
     .then((results) => {
